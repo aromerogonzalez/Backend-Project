@@ -23,9 +23,6 @@ public class PaymentController {
     @Autowired
     PaymentService paymentService;
 
-    @Autowired
-    KafkaProducerService kafkaProducerService;
-
     @GetMapping("/{paymentId}")
     public ResponseEntity<?> getPayment(@PathVariable Long paymentId) {
 
@@ -36,7 +33,6 @@ public class PaymentController {
     public Payment postPayment(@Valid @RequestBody Payment payment) {
 
         Payment savedPayment = paymentService.createUpdatePaymentOrder(payment);
-        kafkaProducerService.sendMessage(savedPayment);
 
         return savedPayment;
     }

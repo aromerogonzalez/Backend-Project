@@ -26,6 +26,9 @@ public class PaymentService {
     private PaymentRepository paymentRepository;
 
     @Autowired
+    KafkaProducerService kafkaProducerService;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     private String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.w-S-G4v0dTE5r8PajRF756FdYryec6AC2mxomZ7yzVY";
@@ -38,16 +41,15 @@ public class PaymentService {
         return ResponseEntity.status(HttpStatus.OK).body(optionalPayment.get());
     }
 
-    @SuppressWarnings("finally")
     public Payment createUpdatePaymentOrder(@RequestBody Payment payment) {
         Payment newPayment = createPayment(payment);
         try {
             updateOrderStatus(newPayment.getOrderId());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-        } finally {
-            return newPayment;
         }
+        kafkaProducerService.sendMessage(newPayment);
+        return newPayment;
 
     }
 
@@ -57,7 +59,7 @@ public class PaymentService {
     }
 
     public void updateOrderStatus(Long orderId) throws JsonMappingException, JsonProcessingException {
-        String endPoint = "http://localhost:8080/orders/" + orderId;
+        String endPoint = "http://localhost:8060/orders/" + orderId;
         JsonNode payLoad = modifyOrderStatus(orderId);
 
         HttpHeaders headers = new HttpHeaders();
@@ -75,7 +77,7 @@ public class PaymentService {
     }
 
     public JsonNode modifyOrderStatus(Long orderId) throws JsonMappingException, JsonProcessingException {
-        String endPoint = "http://localhost:8080/orders/" + orderId;
+        String endPoint = "http://localhost:8060/orders/" + orderId;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
