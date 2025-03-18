@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fausto.users.users.entities.UserData;
-import com.fausto.users.users.repositories.UsersRepository;
+import com.fausto.users.users.repositories.UserRepository;
 import jakarta.validation.Valid;
 
 @Service
 public class UsersService {
     
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository usersRepository;
 
-    public ResponseEntity<UserData> setUserDetails(Integer userId){
+    public ResponseEntity<UserData> getUserDetails(Integer userId){
         Optional<UserData> optionalUser = usersRepository.findById(userId);
         if(optionalUser.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -35,9 +35,8 @@ public class UsersService {
         if(oldUser.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        usersRepository.delete(oldUser.get());
         usersRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body(oldUser.get());
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
 }
