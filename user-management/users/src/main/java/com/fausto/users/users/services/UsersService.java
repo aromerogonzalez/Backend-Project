@@ -18,7 +18,7 @@ public class UsersService {
     @Autowired
     private UserRepository usersRepository;
 
-    public ResponseEntity<UserData> setUserDetails(Integer userId){
+    public ResponseEntity<UserData> getUserDetails(Integer userId){
         Optional<UserData> optionalUser = usersRepository.findById(userId);
         if(optionalUser.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -35,9 +35,8 @@ public class UsersService {
         if(oldUser.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        usersRepository.delete(oldUser.get());
         usersRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body(oldUser.get());
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
 }

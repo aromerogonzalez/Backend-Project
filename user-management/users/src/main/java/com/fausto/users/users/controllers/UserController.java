@@ -46,7 +46,7 @@ public class UserController {
     
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserDetails(@PathVariable Integer userId) {
-        return userService.setUserDetails(userId);
+        return userService.getUserDetails(userId);
     }
     
     @PutMapping("/{userId}")
