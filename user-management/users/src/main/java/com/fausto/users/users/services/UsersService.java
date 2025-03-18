@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fausto.users.users.entities.UserData;
 import com.fausto.users.users.repositories.UsersRepository;
+import com.fausto.users.users.services.Kafka.KafkaProducerService;
+
 import jakarta.validation.Valid;
 
 @Service
@@ -18,15 +20,21 @@ public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
 
+	@Autowired 
+	KafkaProducerService kafkaProducer;
+
     public ResponseEntity<UserData> setUserDetails(Integer userId){
         Optional<UserData> optionalUser = usersRepository.findById(userId);
         if(optionalUser.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+		UserData user = optionalUser.get();
+		kafkaProducer.sendMessage(user);
         return ResponseEntity.status(HttpStatus.OK).body(optionalUser.get());
     }
 
     public UserData setUserDetails(@Valid @RequestBody UserData user){
+		kafkaProducer.sendMessage(user);
         return usersRepository.save(user);
     }
 
@@ -35,8 +43,8 @@ public class UsersService {
         if(oldUser.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        usersRepository.delete(oldUser.get());
         usersRepository.save(user);
+		kafkaProducer.sendMessage(user);
         return ResponseEntity.status(HttpStatus.OK).body(oldUser.get());
     }
 
