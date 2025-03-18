@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fausto.users.users.entities.UserData;
 import com.fausto.users.users.services.UsersService;
+import com.fausto.users.users.services.Kafka.KafkaProducerService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,14 +25,17 @@ import io.jsonwebtoken.security.Keys;
 
 @RestController
 @RequestMapping("/api/users")
-public class UsersController {
+public class UserController {
     
     @Autowired
-    UsersService usersService;
+    UsersService userService;
+
+    @Autowired
+    KafkaProducerService kafkaProducer;
     
     @PostMapping("/register")
     public UserData postUser(@RequestBody UserData user) {
-        return usersService.setUserDetails(user);
+        return userService.setUserDetails(user);
     }
 
     @PostMapping("/login")
@@ -42,13 +46,13 @@ public class UsersController {
     
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserDetails(@PathVariable Integer userId) {
-        return usersService.setUserDetails(userId);
+        return userService.setUserDetails(userId);
     }
     
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Integer userId, @RequestBody UserData user) {
         user.setId(userId);
-        return usersService.updateUser(user);
+        return userService.updateUser(user);
     }
     
 }

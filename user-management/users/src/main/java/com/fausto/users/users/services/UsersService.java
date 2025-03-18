@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fausto.users.users.entities.UserData;
-import com.fausto.users.users.repositories.UsersRepository;
+import com.fausto.users.users.repositories.UserRepository;
 import jakarta.validation.Valid;
 
 @Service
 public class UsersService {
     
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository usersRepository;
 
     public ResponseEntity<UserData> setUserDetails(Integer userId){
         Optional<UserData> optionalUser = usersRepository.findById(userId);
