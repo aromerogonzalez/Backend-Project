@@ -59,7 +59,7 @@ public class PaymentService {
     }
 
     public void updateOrderStatus(Long orderId) throws JsonMappingException, JsonProcessingException {
-        String endPoint = "http://localhost:8060/orders/" + orderId;
+        String endPoint = "http://orders:8060/orders/" + orderId;
         JsonNode payLoad = modifyOrderStatus(orderId);
 
         HttpHeaders headers = new HttpHeaders();
@@ -77,7 +77,7 @@ public class PaymentService {
     }
 
     public JsonNode modifyOrderStatus(Long orderId) throws JsonMappingException, JsonProcessingException {
-        String endPoint = "http://localhost:8060/orders/" + orderId;
+        String endPoint = "http://orders:8060/orders/" + orderId;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
