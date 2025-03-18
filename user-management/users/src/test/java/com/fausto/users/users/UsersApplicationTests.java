@@ -1,10 +1,10 @@
-package com.engineering.payment;
+package com.fausto.users.users;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PaymentApplicationTests {
+class UsersApplicationTests {
 
 	@Test
 	void contextLoads() {
