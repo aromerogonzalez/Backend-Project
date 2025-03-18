@@ -1,4 +1,4 @@
-package com.example.users.entities;
+package com.fausto.users.users.entities;
 
 import java.time.LocalDate;
 
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class User {
+public class UserData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -28,7 +28,7 @@ public class User {
     private String name;
 
     @Size(min=2, message = "Name should have atleast 2 characters")
-    private String lastnName;
+    private String lastName;
 
     @Past(message = "Birth Date should be in the past")
     private LocalDate birthDate;

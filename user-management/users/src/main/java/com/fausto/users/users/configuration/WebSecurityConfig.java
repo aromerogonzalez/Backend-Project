@@ -1,4 +1,4 @@
-package com.example.users.configuration;
+package com.fausto.users.users.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,22 +19,21 @@ public class WebSecurityConfig {
     @Autowired
     JwtAuthFilter jwtAuthFilter;
 
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception{
-        security.csrf((csrf) -> csrf.disable())
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests(
-                    auth -> auth.requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui.html", "swagger-ui/**")
-                        .permitAll().anyRequest().authenticated()
-                ).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        auth -> auth.requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/index.html", "swagger-ui/**")
+                                .permitAll().anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults());
 
-        security.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        return security.build();
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 }

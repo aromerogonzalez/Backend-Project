@@ -1,4 +1,4 @@
-package com.example.users.services;
+package com.fausto.users.users.services;
 
 import java.util.Optional;
 
@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.example.users.entities.User;
-import com.example.users.repositories.UsersRepository;
+import com.fausto.users.users.entities.UserData;
+import com.fausto.users.users.repositories.UsersRepository;
 import jakarta.validation.Valid;
 
 @Service
@@ -18,20 +18,20 @@ public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
 
-    public ResponseEntity<User> userDetails(Integer userId){
-        Optional<User> optionalUser = usersRepository.findById(userId);
+    public ResponseEntity<UserData> setUserDetails(Integer userId){
+        Optional<UserData> optionalUser = usersRepository.findById(userId);
         if(optionalUser.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(optionalUser.get());
     }
 
-    public User registerUser(@Valid @RequestBody User user){
+    public UserData setUserDetails(@Valid @RequestBody UserData user){
         return usersRepository.save(user);
     }
 
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User user){
-        Optional<User> oldUser = usersRepository.findById(user.getId());
+    public ResponseEntity<UserData> updateUser(@Valid @RequestBody UserData user){
+        Optional<UserData> oldUser = usersRepository.findById(user.getId());
         if(oldUser.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
