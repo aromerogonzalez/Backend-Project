@@ -35,6 +35,7 @@ public class UserController {
     
     @PostMapping("/register")
     public UserData postUser(@RequestBody UserData user) {
+        kafkaProducer.sendMessage(user);
         return userService.setUserDetails(user);
     }
 
@@ -52,6 +53,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable Integer userId, @RequestBody UserData user) {
         user.setId(userId);
+        kafkaProducer.sendMessage(user);
         return userService.updateUser(user);
     }
     
